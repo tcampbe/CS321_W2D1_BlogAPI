@@ -2,6 +2,7 @@
 using CS321_W2D1_BlogAPI.Models;
 using System.Collections.Generic;
 using System.Linq;
+using CS321_W2D1_BlogAPI.Services;
 
 namespace CS321_W2D1_BlogAPI.Controllers
 {
@@ -9,63 +10,71 @@ namespace CS321_W2D1_BlogAPI.Controllers
     [ApiController]
     public class PostsController : ControllerBase
     {
-        private int _nextId = 2;
+        private IPostService _postService;
 
-        // BAD! For illustration purposes only. Any changes made to the array will be lost on next request.
-        private List<Post> _posts = new List<Post>
-            {
-                new Post() { Id = 1, Title = "Post1", Body = "blah blah blah" },
-                new Post() { Id = 2, Title = "Post2", Body = "blah blah blah" },
-            };
+        // Constructor
+        // IPostService is automatically injected by the ASP.NET framework, if you've
+        // configured it properly in Startup.ConfigureServices()
+        public PostsController(IPostService postService)
+        {
+            _postService = postService; // keep a reference to the service so we can use below
+        }
 
+        // get all posts
         // GET api/posts
         [HttpGet]
         public IActionResult Get()
         {
             // return OK 200 status and list of posts
-            return Ok(_posts);
+            return Ok(_postService.GetAll());
         }
 
+        // get specific post by id
         // GET api/posts/:id
         [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
             // look up post by id
-            var post = _posts.FirstOrDefault(p => p.Id == id);
-            // if not found, return NotFound (404)
+            var post = _postService.Get(id);
+            // if not found, return 404 NotFound 
             if (post == null) return NotFound();
-            // otherwise return post (200)
+            // otherwise return 200 OK and the Post
             return Ok(post);
         }
 
+        // create a new post
         // POST api/posts
         [HttpPost]
         public IActionResult Post([FromBody] Post newPost)
         {
-            // BAD! for illustration only. Not a safe way to generate an id in a real system.
-            newPost.Id = ++_nextId;
-            _posts.Add(newPost);
+            // add the new post
+            _postService.Add(newPost);
+
+            // return a 201 Created status. This will also add a "location" header
+            // with the URI of the new post. E.g., /api/posts/99, if the new is 99
             return CreatedAtAction("Get", new { Id = newPost.Id }, newPost);
         }
 
+        // update an existing post
         // PUT api/posts/:id
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] Post updatedPost)
         {
-            var post = _posts.FirstOrDefault(p => p.Id == id);
+            var post = _postService.Get(id);
             if (post == null) return NotFound();
-            _posts.Remove(post);
-            _posts.Add(updatedPost);
+            _postService.Remove(post);
+            _postService.Add(updatedPost);
             return Ok(updatedPost);
         }
 
+        // delete an existing post
         // DELETE api/posts/:id
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var post = _posts.FirstOrDefault(p => p.Id == id);
+            var post = _postService.Get(id);
             if (post == null) return NotFound();
-            _posts.Remove(post);
+            _postService.Remove(post);
             return NoContent();
         }
     }

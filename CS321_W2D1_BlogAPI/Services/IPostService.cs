@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using CS321_W2D1_BlogAPI.Models;
 
 namespace CS321_W2D1_BlogAPI.Services
 {
-    public interface IToDoService
+    public interface IPostService
     {
-        void Add(Post post);
+        IEnumerable<Post> GetAll();
+        Post Get(int id);
+        Post Add(Post post);
         void Remove(Post post);
     }
 }
