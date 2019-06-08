@@ -10,7 +10,7 @@ namespace CS321_W2D1_BlogAPI.Controllers
     [ApiController]
     public class PostsController : ControllerBase
     {
-        private IPostService _postService;
+        private readonly IPostService _postService;
 
         // Constructor
         // IPostService is automatically injected by the ASP.NET framework, if you've
