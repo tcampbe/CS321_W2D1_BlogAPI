@@ -52,7 +52,8 @@ namespace CS321_W2D1_BlogAPI.Services
             // get the Post object in the current list with this id 
             var currentPost = this.Get(updatedPost.Id);
 
-            // TODO: handle not found?
+            // return null if the Post to update isn't found
+            if (currentPost == null) return null;
 
             // copy the property values from the updated post into the current post object
             currentPost.Title = updatedPost.Title;
