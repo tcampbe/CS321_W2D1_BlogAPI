@@ -60,10 +60,8 @@ namespace CS321_W2D1_BlogAPI.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] Post updatedPost)
         {
-            var post = _postService.Get(id);
+            _postService.Update(post);
             if (post == null) return NotFound();
-            _postService.Remove(post);
-            _postService.Add(updatedPost);
             return Ok(updatedPost);
         }
 
