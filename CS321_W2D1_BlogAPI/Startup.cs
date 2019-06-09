@@ -28,8 +28,7 @@ namespace CS321_W2D1_BlogAPI
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            // configure PostService so it will be injected into controller
-            services.AddSingleton<IPostService, PostService>();
+            // TODO: configure PostService so it will be injected into controller
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
