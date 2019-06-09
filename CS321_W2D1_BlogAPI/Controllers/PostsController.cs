@@ -61,10 +61,10 @@ namespace CS321_W2D1_BlogAPI.Controllers
         [HttpPut("{id}")]
         public IActionResult Put(int id, [FromBody] Post updatedPost)
         {
-            // TODO: use _postService to get post by id
+            Post post;
+            // TODO: use _postService to update post. store returned Post in the post variable.
             if (post == null) return NotFound();
-            // TODO: use _postService to update post
-            return Ok(updatedPost);
+            return Ok(post);
         }
 
         // delete an existing post
